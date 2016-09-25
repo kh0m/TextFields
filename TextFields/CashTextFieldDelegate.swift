@@ -11,33 +11,57 @@ import UIKit
 
 class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = NumberFormatter.Style.currency
         
-        // current text
-        let oldFormattedText = textField.text!
-        print(oldFormattedText)
+        let oldText = textField.text! as NSString
+        var newText = oldText.replacingCharacters(in: range, with: string)
+        var newTextString = String(newText)
         
-        // make it a number so we can find the penny amount
-        let oldNumber = formatter.number(from: oldFormattedText)!
-        print(oldNumber)
+        let digits = CharacterSet.decimalDigits
+        var digitText = ""
+        for c in (newTextString?.unicodeScalars)! {
+            if digits.contains(UnicodeScalar(c.value)!) {
+                digitText.append("\(c)")
+            }
+        }
         
-        // remove the decimal
-        let oldUnformattedString = String(describing: oldNumber)
-        let penniesString = String(oldUnformattedString.characters.filter{$0 != "."}) as NSString
-        print(penniesString)
+        // Format the new string
+        if let numOfPennies = Int(digitText) {
+            newText = "$" + self.dollarStringFromInt(numOfPennies) + "." + self.centsStringFromInt(numOfPennies)
+        } else {
+            newText = "$0.00"
+        }
         
-        // text after whatever change the user wants to make, whether it is typing a character, pasting, etc.
-        let newString = penniesString.replacingCharacters(in: range, with: string)
-        print(newString)
-
-        // reformat it
-        let number = NSNumber(value: Int(newString)!)
-        let formattedNumber = formatter.string(from: number)
+        textField.text = newText
         
-        textField.text = formattedNumber
-
-        return true
+        return false
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text!.isEmpty {
+            textField.text = "$0.00"
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true;
+    }
+    
+    func dollarStringFromInt(_ value: Int) -> String {
+        return String(value / 100)
+    }
+    
+    func centsStringFromInt(_ value: Int) -> String {
+        
+        let cents = value % 100
+        var centsString = String(cents)
+        
+        if cents < 10 {
+            centsString = "0" + centsString
+        }
+        
+        return centsString
     }
     
 }
