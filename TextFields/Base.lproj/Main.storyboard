@@ -48,7 +48,11 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gIa-g4-CnI"/>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gIa-g4-CnI">
+                                                <connections>
+                                                    <action selector="toggleTheTextEditor:" destination="BYZ-38-t0r" eventType="valueChanged" id="fsZ-kr-sad"/>
+                                                </connections>
+                                            </switch>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="j4P-g5-zmA" firstAttribute="top" secondItem="Bgh-ml-de2" secondAttribute="top" constant="4" id="QrC-wc-YH3"/>
@@ -73,6 +77,7 @@
                     </view>
                     <connections>
                         <outlet property="cashField" destination="HrB-5V-NvJ" id="UwR-CI-TdF"/>
+                        <outlet property="lockSwitch" destination="gIa-g4-CnI" id="nu5-xs-F9w"/>
                         <outlet property="lockableField" destination="qKM-ys-hho" id="drB-Ci-qXo"/>
                         <outlet property="zipField" destination="y77-Hz-HLD" id="vdI-Xv-re9"/>
                     </connections>

@@ -8,18 +8,22 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Outlets
+    
     @IBOutlet weak var zipField: UITextField!
     @IBOutlet weak var cashField: UITextField!
     @IBOutlet weak var lockableField: UITextField!
+    @IBOutlet weak var lockSwitch: UISwitch!
     
-    // MARK: Variables
+    // MARK: Properties
+    
     let zipTextFieldDelegate = ZipTextFieldDelegate()
     let cashTextFieldDelegate = CashTextFieldDelegate()
     
     // MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -27,9 +31,27 @@ class ViewController: UIViewController {
         // set delegates
         zipField.delegate = zipTextFieldDelegate
         cashField.delegate = cashTextFieldDelegate
+        lockableField.delegate = self
     }
 
-
+    // MARK: Text Field Delegate
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return self.lockSwitch.isOn
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true;
+    }
+    
+    @IBAction func toggleTheTextEditor(_ sender: AnyObject) {
+        
+        if !(sender as! UISwitch).isOn {
+            lockableField.resignFirstResponder()
+        }
+    }
 
 }
 
