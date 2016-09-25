@@ -15,12 +15,24 @@ class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
         formatter.numberStyle = NumberFormatter.Style.currency
         
         // current text
-        let oldText = textField.text! as NSString
-        // text after whatever change the user wants to make, whether it is typing a character, pasting, etc.
-        let newText = oldText.replacingCharacters(in: range, with: string)
+        let oldFormattedText = textField.text!
+        print(oldFormattedText)
         
-        let pennies = Double(newText)! / 100
-        let number = NSNumber(value: pennies)
+        // make it a number so we can find the penny amount
+        let oldNumber = formatter.number(from: oldFormattedText)!
+        print(oldNumber)
+        
+        // remove the decimal
+        let oldUnformattedString = String(describing: oldNumber)
+        let penniesString = String(oldUnformattedString.characters.filter{$0 != "."}) as NSString
+        print(penniesString)
+        
+        // text after whatever change the user wants to make, whether it is typing a character, pasting, etc.
+        let newString = penniesString.replacingCharacters(in: range, with: string)
+        print(newString)
+
+        // reformat it
+        let number = NSNumber(value: Int(newString)!)
         let formattedNumber = formatter.string(from: number)
         
         textField.text = formattedNumber
